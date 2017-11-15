@@ -1,0 +1,8 @@
+com/grupoatrium/persistencia/impl/LibrosDAO.class
+com/grupoatrium/cliente/AppMain.class
+com/grupoatrium/modelo/Direccion.class
+com/grupoatrium/modelo/Libro.class
+com/grupoatrium/persistencia/impl/ConnectionMgr.class
+com/grupoatrium/modelo/Editorial.class
+com/grupoatrium/modelo/Autor.class
+com/grupoatrium/persistencia/impl/EditorialesDAO.class

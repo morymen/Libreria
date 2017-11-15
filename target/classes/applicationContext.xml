@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+		
+	<bean id="autor" class="com.grupoatrium.modelo.Autor">
+		<property name="nombre"  value="Alberto"/>
+		<property name="nacionalidad" value="Espana"/>
+		<property name="comentarios" value="Esto es uncomentairio"/>
+	</bean>	
+	
+	
+	<bean id="direccion" class="com.grupoatrium.modelo.Direccion">
+		<constructor-arg index="0" value="Calle"></constructor-arg>
+		<constructor-arg index="1" value="1"></constructor-arg>
+		<constructor-arg index="2" value="Poblacion"></constructor-arg>
+		<constructor-arg index="3" value="1234"></constructor-arg>
+		<constructor-arg index="4" value="Provincia"></constructor-arg>
+	</bean>
+	
+	
+	<bean id="editorial" class="com.grupoatrium.modelo.Editorial">
+		<property name="nombre">
+			<value type="java.lang.String">Editorial nombre</value>
+		</property>
+		<property name="direccion" ref="direccion"></property>
+		<property name="nif">
+			<value type="java.lang.String">3215464D</value>
+		</property>
+	</bean>
+	
+	
+	<bean id="libro" class="com.grupoatrium.modelo.Libro" >
+		<property name="isbn" value="Numero de libro"></property>
+		<property name="titulo" value="Titulo del libro"></property>
+		<property name="autores">
+			<list value-type="com.grupoatrium.modelo.Autor">
+				<ref bean="autor"/>
+				<bean class="com.grupoatrium.modelo.Autor">
+					<property name="nombre"  value="Anonimo"/>
+					<property name="nacionalidad" value="Anonima"/>
+					<property name="comentarios" value="Esto es comentario en un bean anonimo"/>
+				</bean>
+			</list>
+		</property>
+		<property name="editorial" ref="editorial"></property>
+		<property name="publicacion" value="12" ></property>
+		<property name="precio" value="12.56" ></property>
+		<property name="descripcion" value="Esta es la descripcion"></property>
+	</bean>
+	
+	
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>data-source.properties</value>
+			</list>
+		</property>
+
+		<property name="ignoreUnresolvablePlaceholders" value="true" />
+	</bean>
+	
+	<bean id="connectionMgr" class="com.grupoatrium.persistencia.impl.ConnectionMgr">
+		<property name="driver" value="${driver}" />
+		<property name="url" value="${url}" />
+		<property name="usuario" value="${usuario}" />
+		<property name="password" value="${password}" />
+	</bean>
+	
+	<bean id="abstractconnMgr" abstract="true">
+		<property name="connectionMgr" ref="connectionMgr"></property>
+	</bean>
+	
+	<bean id="librosDAO" parent="abstractconnMgr" class="com.grupoatrium.persistencia.impl.LibrosDAO" ></bean>
+ 	<bean id="editorialesDAO" parent="abstractconnMgr" class="com.grupoatrium.persistencia.impl.EditorialesDAO" ></bean> 
+	
+	
+</beans>
+
+
+
