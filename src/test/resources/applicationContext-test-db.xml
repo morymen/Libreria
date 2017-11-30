@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/jdbc 
+       http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+		
+	
+	<bean id="miDataSource"
+             class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+           <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+           <property name="url" value="jdbc:mysql://localhost:3306/libreria" />
+           <property name="username" value="test" />
+           <property name="password" value="Qwer%1234" />
+       </bean>
+       
+<!--     <jdbc:embedded-database id="miDataSource" type="H2" database-name="libreria;DATABASE_TO_UPPER=false;MODE=Oracle"> -->
+    	
+<!-- 		<jdbc:script location="classpath:com/grupoatrium/db/schema.sql" /> -->
+		
+<!-- 	</jdbc:embedded-database>   -->
+
+       <bean id="template"
+             class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+           <constructor-arg ref="miDataSource" />
+       </bean>
+
+       <bean id="mapeadorAutor" class="com.grupoatrium.persistencia.impl.test.MapeadorAutor" />
+       
+	   <bean id="mapeadorDireccion" class="com.grupoatrium.persistencia.impl.test.MapeadorDireccion" />
+       <bean id="mapeadorEditorial" class="com.grupoatrium.persistencia.impl.test.MapeadorEditorial">
+       			<property name="direccionDAO" ref= "direccionDAO"/>
+       </bean>
+       <bean id="mapeadorLibros" class="com.grupoatrium.persistencia.impl.test.MapeadorLibros">
+       		<property name="editorialDAO" ref= "editorialDAO"/>
+       		<property name="librosAutoresDAO" ref= "librosAutoresDAO"/>
+       </bean>
+       
+       <bean id="mapeadorLibrosAutores" class="com.grupoatrium.persistencia.impl.test.MapeadorLibrosAutores">
+       			<property name="autorDAO" ref= "autorDAO"/>
+       </bean>
+       				
+       
+
+       <bean id="autorDAO" class="com.grupoatrium.persistencia.impl.test.AutorDAO">
+           <property name="plantilla" ref="template" />
+           <property name="mapeador" ref="mapeadorAutor" />
+       </bean>	
+       
+       <bean id="direccionDAO" class="com.grupoatrium.persistencia.impl.test.DireccionDAO">
+       		<property name="plantilla" ref="template" />
+           <property name="mapeador" ref="mapeadorDireccion" />
+       </bean>
+       
+       
+       <bean id="editorialDAO" class="com.grupoatrium.persistencia.impl.test.EditorialDAO">
+       		<property name="plantilla" ref="template" />
+   	        <property name="mapeador" ref="mapeadorEditorial" />
+  	         <property name="direccionDAO" ref="direccionDAO" />
+       </bean>
+       
+       <bean id="librosAutoresDAO" class="com.grupoatrium.persistencia.impl.test.LibrosAutoresDAO">
+			<property name="plantilla" ref="template" />
+			<property name="mapeador" ref="mapeadorLibrosAutores" />
+       </bean>  
+       
+       <bean id="libroDAO" class="com.grupoatrium.persistencia.impl.test.LibroDAO">
+       		<property name="plantilla" ref="template" />
+       	  	<property name="mapeador" ref="mapeadorLibros" />
+       	  	<property name="editorialDAO" ref="editorialDAO" />
+       	  	<property name="autorDAO" ref="autorDAO" />
+       	  	<property name="librosAutoresDAO" ref="librosAutoresDAO" />
+       </bean>
+       
+       <bean id="negocioAutor" class="com.grupoatrium.negocio.test.NegocioAutor">
+       		<property name="dao" ref="autorDAO"/>
+       </bean>
+       
+       <bean id="negocioDireccion" class="com.grupoatrium.negocio.test.NegocioDireccion">
+       		<property name="dao" ref="direccionDAO"/>
+       </bean>
+       
+       <bean id="negocioEditorial" class="com.grupoatrium.negocio.test.NegocioEditorial">
+       		<property name="dao" ref="editorialDAO"/>
+       </bean>  
+       
+       <bean id="negocioLibro" class="com.grupoatrium.negocio.test.NegocioLibro">
+       		<property name="dao" ref="libroDAO"/>
+       </bean>
+		
+</beans>
+
+
+
