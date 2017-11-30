@@ -1,4 +1,4 @@
-package com.grupoatrium.cliente;
+package com.grupoatrium.cliente.test;
 
 import java.util.ArrayList;
 import java.util.List;
