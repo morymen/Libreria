@@ -1,5 +1,7 @@
 # Compiled class file
 *.class
+*.svn*
+*.svn/*
 .svn*
 .settings
 .classpath
